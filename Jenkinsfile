@@ -40,7 +40,7 @@ pipeline {
     post {  
         always {
             // Record code coverage using Cobertura
-            recordCoverage enabled: true, tool: cobertura(pattern: '**/build/reports/cobertura/coverage.xml'), sourceRegex: 'src/main/java/(.*)', classRegex: 'classes/(.*)'
+            recordCoverage(tools: [[parser: 'COBERTURA', pattern: '**/build/reports/cobertura/coverage.xml']])
         }
         success {
                 echo "Sending success mail"
