@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     echo "Building"
-                    sh "gradle clean build"
+                    sh "./gradlew clean build"
                 }
             }
         }
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 // Run tests using Gradle
                 script {
-                    sh "gradle test"
+                    sh "./gradlew test"
                 }
             }
         }
