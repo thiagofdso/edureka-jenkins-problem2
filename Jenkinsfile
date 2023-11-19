@@ -39,7 +39,7 @@ pipeline {
         always {
             // Record code coverage using Cobertura
             echo "Recording coverage"
-            recordCoverage enabled: true, tool: jacoco(pattern: '**/build/reports/jacoco/test/jacocoTestReport.xml')
+            recordCoverage(tools: [[pattern: '**/build/reports/jacoco/test/jacocoTestReport.xml']])
         }
         success {
                 echo "Sending success mail"
