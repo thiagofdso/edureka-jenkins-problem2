@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-            EMAILS = "thiagofdso.ufpa@gmail.com"
+        EMAILS = "thiagofdso.ufpa@gmail.com"
+        GRADLE_HOME = tool 'Gradle-8.4'
+        PATH = "${GRADLE_HOME}/bin:${env.PATH}"
     }
 
     stages {
@@ -13,42 +15,25 @@ pipeline {
             }
         }
 
-        stage('Test') {
+	    stage('Build') {
             steps {
-                // Run tests using Maven
                 script {
-                    def mvnHome = tool 'Maven-3.6.3'
-                    def mvnCmd = "${mvnHome}/bin/mvn"
-                    sh "${mvnCmd} test"
+                    echo "Building"
+                    sh "gradle clean build"
                 }
             }
         }
 
-	    stage('Parallel Build') {
-           parallel {
-                stage('Development') {
-                    steps {
-                        script {
-                            echo "Building for Development environment"
-                            def mvnHome = tool 'Maven-3.6.3'
-                            def mvnCmd = "${mvnHome}/bin/mvn"
-                 		     sh "${mvnCmd} clean package -P development -DskipTests=true"
-                        }
-                    }
+        stage('Test') {
+            steps {
+                // Run tests using Gradle
+                script {
+                    sh "gradle test"
                 }
-
-                stage('Production') {
-                    steps {
-                        script {
-                            echo "Building for Production environment"
-                            def mvnHome = tool 'Maven-3.6.3'
-                            def mvnCmd = "${mvnHome}/bin/mvn"
-                 		     sh "${mvnCmd} clean package -P production -DskipTests=true"
-                        }
-                    }
-                }
-             }
+            }
         }
+
+
     }
 
     post {  
