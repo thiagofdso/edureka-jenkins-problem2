@@ -39,17 +39,16 @@ pipeline {
 
     post {  
         always {
-            // Publish Cobertura coverage report
-            cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'build/reports/cobertura/coverage.xml', onlyStable: false
-        }
+            // Record code coverage using Jacoco
+            recordCodeCoverage enabled: true, sourceDirectories: 'src', execPattern: '**/build/jacoco/test.exec', classPattern: '**/classes', sourcePattern: '**/src', maximumStalenessDays: 3        }
         success {
                 echo "Sending success mail"
-                emailext attachmentsPattern: '**/build/reports/cobertura/coverage.xml', body: '${TEMPLATE, file="managed:SuccessMail-Body"}', subject: '${TEMPLATE, file="managed:SuccessMail-Title"}', to: "${EMAILS}"
+                emailext attachmentsPattern: '**/build/reports/jacoco/test/html/index.html', body: '${TEMPLATE, file="managed:SuccessMail-Body"}', subject: '${TEMPLATE, file="managed:SuccessMail-Title"}', to: "${EMAILS}"
         }
             
         unsuccessful {
                 echo "Sending failed mail"
-                emailext attachmentsPattern: '**/build/reports/cobertura/coverage.xml', attachLog: true, body: '${TEMPLATE, file="managed:FailedMail-Body"}', subject: '${TEMPLATE, file="managed:FailedMail-Title"}', to: "${EMAILS} "
+                emailext attachmentsPattern: '**/build/reports/jacoco/test/html/index.html', attachLog: true, body: '${TEMPLATE, file="managed:FailedMail-Body"}', subject: '${TEMPLATE, file="managed:FailedMail-Title"}', to: "${EMAILS} "
         }
     }
 }
