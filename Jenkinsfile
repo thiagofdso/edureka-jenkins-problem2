@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         EMAILS = "thiagofdso.ufpa@gmail.com"
+        JAVA_HOME = tool 'Java-8'
         GRADLE_HOME = tool 'Gradle-8.4'
         PATH = "${GRADLE_HOME}/bin:${env.PATH}"
     }
