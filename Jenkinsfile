@@ -39,16 +39,16 @@ pipeline {
         always {
             // Record code coverage using Cobertura
             echo "Recording coverage"
-            recordCoverage(tools: [[pattern: '**/build/reports/jacoco/test/html/index.html']])
+            recordCoverage enabled: true, tool: jacoco(pattern: '**/build/reports/jacoco/test/jacocoTestReport.xml')
         }
         success {
                 echo "Sending success mail"
-                emailext attachmentsPattern: '**/build/reports/jacoco/test/html/index.html', body: '${TEMPLATE, file="managed:SuccessMail-Body"}', subject: '${TEMPLATE, file="managed:SuccessMail-Title"}', to: "${EMAILS}"
+                emailext attachmentsPattern: '**/build/reports/jacoco/test/jacocoTestReport.xml', body: '${TEMPLATE, file="managed:SuccessMail-Body"}', subject: '${TEMPLATE, file="managed:SuccessMail-Title"}', to: "${EMAILS}"
         }
             
         unsuccessful {
                 echo "Sending failed mail"
-                emailext attachmentsPattern: '**/build/reports/jacoco/test/html/index.html', attachLog: true, body: '${TEMPLATE, file="managed:FailedMail-Body"}', subject: '${TEMPLATE, file="managed:FailedMail-Title"}', to: "${EMAILS} "
+                emailext attachmentsPattern: '**/build/reports/jacoco/test/jacocoTestReport.xml', attachLog: true, body: '${TEMPLATE, file="managed:FailedMail-Body"}', subject: '${TEMPLATE, file="managed:FailedMail-Title"}', to: "${EMAILS} "
         }
     }
 }
