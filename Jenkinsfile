@@ -33,7 +33,13 @@ pipeline {
                 }
             }
         }
-
+        stage('Generate Coverage Report'){
+            steps{
+                script{
+                    sh "./gradlew jacocoTestReport"
+                }
+            }
+        }
 
     }
 
